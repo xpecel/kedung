@@ -1,0 +1,23 @@
+*.log
+*.pyc
+__pycache__
+
+*.pytest_*
+*.ruff*
+*egg*
+*mypy*
+dist/
+build/
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+Env/
+
+.coverage
+uv.lock

@@ -1,0 +1,8 @@
+-r requirements.txt
+
+uvloop==0.20.0
+ruff==0.6.4
+mypy==1.11.2
+mypy-extensions==1.0.0
+typing-extensions==4.12.2
+pylsp-mypy==0.6.9

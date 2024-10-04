@@ -1,0 +1,9 @@
+[runtime]
+cache_duration = 10  # menit
+preallocate_space = 7
+
+[location]
+socket = "/tmp/kedung/"
+log = "/tmp/kedung/"
+
+[misc]

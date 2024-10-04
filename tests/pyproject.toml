@@ -1,0 +1,20 @@
+[tool.ruff]
+extend = "../pyproject.toml"
+[tool.ruff.lint]
+ignore = [
+    "S101",
+    "E402",
+    "S108",
+    "D101",
+    "D102",
+    "SLF001",
+    "RUF100",
+    "D212",
+    "D205",
+    "PT001",
+    "PT023",
+    "DOC201",
+    "PLC2701",
+    "DOC402",
+    "D103",
+]
