@@ -37,11 +37,11 @@ else:
 # client.py
 import asyncio
 
-from kedung import HoarderClient
+from kedung import Client
 
 
 async def main() -> None:
-    client = HoarderClient()
+    client = Client()
 
     await client.create_connection()
 
