@@ -1,9 +1,7 @@
-[runtime]
+[kedung.runtime]
 cache_duration = 10  # menit
 preallocate_space = 7
 
-[location]
+[kedung.location]
 socket = "/tmp/kedung/"
 log = "/tmp/kedung/"
-
-[misc]
