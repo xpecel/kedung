@@ -1,4 +1,4 @@
-import asyncio  # noqa: D100
+import asyncio
 import sys
 from pathlib import Path
 

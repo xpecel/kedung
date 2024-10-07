@@ -27,12 +27,14 @@ def valid_data() -> bytes:
 
 @pytest.fixture
 def broken_data() -> list[bytes]:
-    chunk: str = dumps({
-        "broken_key_1": "data_1",
-        "injected_data": "SET_28esd317",
-    })
+    chunk: str = dumps(
+        {
+            "broken_key_1": "data_1",
+            "injected_data": "SET_28esd317",
+        }
+    )
     raw_data: bytes = allocate_data_length(chunk)
-    return [raw_data[:PREALOCATE_SPACE + 4], raw_data[PREALOCATE_SPACE + 4:]]
+    return [raw_data[: PREALOCATE_SPACE + 4], raw_data[PREALOCATE_SPACE + 4 :]]
 
 
 def executor(chunks: Iterable[bytes]) -> dict[str, dict[str, str]]:
@@ -71,7 +73,8 @@ def test_unpacking_data_with_broken_data(broken_data: list[bytes]) -> None:
 
 
 def test_unpacking_data_with_both_data_types(
-    broken_data: list[bytes], valid_data: bytes,
+    broken_data: list[bytes],
+    valid_data: bytes,
 ) -> None:
     result = executor([*broken_data, valid_data])
     for user in ("client", "server"):

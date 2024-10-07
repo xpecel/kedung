@@ -3,6 +3,7 @@ from kedung.server._storage import DataHolder
 
 DummyData = list[tuple[str, dict[str, str]]]
 
+
 @pytest.fixture
 def holder() -> DataHolder:
     return DataHolder()
@@ -44,6 +45,7 @@ def test_clear_data(holder: DataHolder, dummy_data: DummyData) -> None:
     holder.set_(key, dummy_data[0][1])
 
     assert holder.clear(key)
+
 
 def test_clear_all_data(holder: DataHolder, dummy_data: DummyData) -> None:
     holder.set_(dummy_data[0][0], dummy_data[0][1])

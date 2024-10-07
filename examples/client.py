@@ -49,7 +49,8 @@ async def main() -> None:  # noqa: D103
             for key, value in {**single_op, **multi_op}.items():
                 tasks.append(
                     client.send(
-                        key, cast(Data, value),
+                        key,
+                        cast(Data, value),
                     ),
                 )
 

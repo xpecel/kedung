@@ -25,7 +25,8 @@ class ServerBufferedProtocol(asyncio.BufferedProtocol):
         super().__init__()
 
     def connection_made(
-        self, transport: asyncio.Transport,  # type: ignore[override]
+        self,
+        transport: asyncio.Transport,  # type: ignore[override]
     ) -> None:
         self.transport = transport
         logger.info("Koneksi dibuat!")
@@ -55,7 +56,8 @@ class ServerBufferedProtocol(asyncio.BufferedProtocol):
         result: Data
 
         data_value = cast(
-            MutableMapping[object, object], user_data.get("data"),
+            MutableMapping[object, object],
+            user_data.get("data"),
         )
         injected_data = cast(str, data_value.get("injected_data"))
         command = cast(str | None, user_data.get("command"))

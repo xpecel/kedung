@@ -94,7 +94,7 @@ def get_loging_level() -> int:
     default_status = "INFO"
 
     if not read_file:
-        return logging_levels.get(default_status)
+        return cast(int, logging_levels.get(default_status))
 
     runtime: str | dict[str, int | str] = read_file.get("runtime", default_status)
     level: str = (

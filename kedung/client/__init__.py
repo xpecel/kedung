@@ -124,7 +124,8 @@ class Client:
             raise MissingComponentError(msg)
 
         encoded_data, unique_key = self._pre_processing_data(
-            command.upper(), cast(Data, data),
+            command.upper(),
+            cast(Data, data),
         )
         self._transport.write(encoded_data)
 

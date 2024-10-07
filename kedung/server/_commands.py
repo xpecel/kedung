@@ -41,7 +41,8 @@ class Command:
         return (key, value, injected_data)
 
     def _bulk_split_data(
-        self, data: Data,
+        self,
+        data: Data,
     ) -> tuple[dict[str, DataValue], str]:
         actual_data = cast(dict[str, DataValue], data.get("data"))
         injected_data = cast(str, actual_data.pop("injected_data"))
@@ -124,7 +125,7 @@ class Command:
     def flush_(self, data: Data) -> Data:
         actual_data = cast(dict[str, DataValue], data.get("data"))
         injected_data = cast(str, actual_data.pop("injected_data"))
-        operation_result: dict[str, bool]= {"flush": self._storage.clear_all()}
+        operation_result: dict[str, bool] = {"flush": self._storage.clear_all()}
 
         result = {**operation_result, "injected_data": injected_data}
         return cast(Data, result)

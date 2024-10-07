@@ -86,11 +86,11 @@ async def test_remove_expired_items(
 def test_item_is_not_expired(
     dummy_data: DummyData,
 ) -> None:
-    assert  not _is_expired(dummy_data["key_1"])
+    assert not _is_expired(dummy_data["key_1"])
+
 
 def test_item_is_expired(
     dummy_data: DummyData,
 ) -> None:
     with freeze_time("2025-01-01"):
         assert _is_expired(dummy_data["key_1"])
-

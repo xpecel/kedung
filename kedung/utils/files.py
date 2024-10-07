@@ -36,9 +36,7 @@ class _BasePath:
 
     @classmethod
     def _create_dirs(cls, user_path: str, default_path: str) -> None:
-        user_instance = (
-            user_path if isinstance(user_path, Path) else Path(user_path)
-        )
+        user_instance = user_path if isinstance(user_path, Path) else Path(user_path)
         dp_instance = (
             default_path if isinstance(default_path, Path) else Path(default_path)
         )
@@ -52,8 +50,8 @@ class _BasePath:
 
         _user_path: Path = (
             user_instance
-            if user_instance.is_absolute() else
-            Path.cwd() / str(user_instance)
+            if user_instance.is_absolute()
+            else Path.cwd() / str(user_instance)
         )
 
         if not _user_path.exists():

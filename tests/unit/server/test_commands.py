@@ -207,6 +207,7 @@ class TestBulkOperations:
         assert not result.get("key_1")
         assert not result.get("key_2")
 
+
 def test_flush(command: Command) -> None:
     dummy: Data = {
         "command": "SET",

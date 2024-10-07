@@ -75,7 +75,7 @@ class UnpackRawData:
             # Berisi data yg bisa dideserialisasi atau yg tidak menyebabakan
             # exception.
             data = self._remaining_data[
-                PREALLOCATE_SPACE:length_data + PREALLOCATE_SPACE
+                PREALLOCATE_SPACE : length_data + PREALLOCATE_SPACE
             ]
             if not data and len(self._remaining_data) >= length_data:
                 self._set_broken_data(self._user, self._remaining_data)
@@ -91,7 +91,7 @@ class UnpackRawData:
 
             self._available_data.append(data)
 
-            remaining_data = self._remaining_data[length_data + PREALLOCATE_SPACE:]
+            remaining_data = self._remaining_data[length_data + PREALLOCATE_SPACE :]
 
             if not remaining_data:
                 # semua data sudah selesai diproses. mengosongkan

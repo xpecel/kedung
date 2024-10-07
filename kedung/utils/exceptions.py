@@ -1,4 +1,4 @@
-class PrefixError(Exception):  # noqa: D100
+class PrefixError(Exception):
     """Dinaikan ketika terdapat kesalahan prefix."""
 
 
