@@ -6,3 +6,4 @@ mypy==1.11.2
 mypy-extensions==1.0.0
 typing-extensions==4.12.2
 pylsp-mypy==0.6.9
+pre-commit
