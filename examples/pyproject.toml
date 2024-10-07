@@ -1,0 +1,6 @@
+[tool.ruff]
+extend = "../pyproject.toml"
+[tool.ruff.lint]
+ignore = [
+    "INP001",
+]
