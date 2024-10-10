@@ -1,7 +1,9 @@
 import asyncio
 import json
 from pathlib import Path
-from typing import TypeVar, cast
+from typing import cast
+
+import structlog
 
 from kedung.client import _helper as helper
 from kedung.client._protocol import ClientBufferedProtocol
@@ -12,7 +14,7 @@ from kedung.utils.exceptions import MissingComponentError
 from kedung.utils.files import SocketPath
 from kedung.utils.userconf import get_sock_path
 
-T = TypeVar("T", bound="Client")
+logger = structlog.get_logger()
 
 
 class Client:
@@ -95,11 +97,28 @@ class Client:
         """
         if not cls._connection_established:
             loop = asyncio.get_running_loop()
-            cls._transport, cls._protocol = await loop.create_unix_connection(
-                protocol_factory=ClientBufferedProtocol,  # type: ignore[arg-type]
-                path=str(cls._sock_file),
-            )
-            cls._connection_established = True
+            try:
+                cls._transport, cls._protocol = await loop.create_unix_connection(
+                    protocol_factory=ClientBufferedProtocol,  # type: ignore[arg-type]
+                    path=str(cls._sock_file),
+                )
+            except ConnectionRefusedError as CRE:
+                error_msg = CRE.args[0]
+                connection_refused = 111
+                if error_msg == connection_refused:
+                    hints = [
+                        "Cek jika sever sudah berjalan apa belum.",
+                        "",
+                        "Cek jika path socket yg digunakan oleh client",
+                        "sama dengan path socket yg digunakan oleh",
+                        "server.",
+                    ]
+                    await logger.acritical("Tidak dapat terhubung ke server!")
+                    for hint in hints:
+                        await logger.ainfo(f"Petunjuk: {hint}")
+            else:
+                cls._connection_established = True
+                await logger.ainfo("Koneksi berhasil dibuat!")
 
     async def send(self, command: str, data: Data | None = None) -> Data:
         """Mengirimkan perintah dan data melalui soket.
