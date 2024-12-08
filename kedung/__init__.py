@@ -1,4 +1,4 @@
-from .client import Client
-from .server import Server
+from .client.connection import Client
+from .server.connection import Server
 
 __all__ = ("Server", "Client")
