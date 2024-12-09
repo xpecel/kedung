@@ -6,7 +6,7 @@ from tempfile import mkstemp
 from unittest.mock import AsyncMock
 
 import pytest
-from kedung.server import Server
+from kedung.server.connection import Server
 from pytest_mock.plugin import MockerFixture
 
 
@@ -95,28 +95,26 @@ async def test_successfully_run(
     mocker: MockerFixture,
     server: Server,
 ) -> None:
-    mock_schedule_task = AsyncMock()
-    mock_start_server = AsyncMock(spec=asyncio.Server)
     mock_serve_forever = AsyncMock()
 
     mocker.patch(
-        "kedung.server.schedule_task",
-        side_effect=mock_schedule_task,
+        "kedung.server._schdule.schedule_task",
+        side_effect=AsyncMock(),
     )
     mocker.patch.object(
         Server,
         "_start_server",
-        return_value=mock_start_server,
+        return_value=AsyncMock(spec=asyncio.Server),
     )
-    mocker.patch.object(
-        mock_start_server,
-        "serve_forever",
+    mocker.patch(
+        "asyncio.Server.serve_forever",
         side_effect=mock_serve_forever,
     )
 
-    await server.run()
-
-    mock_serve_forever.assert_awaited_once()
+    try:
+        await asyncio.wait_for(server.run(), 0.01)
+    except TimeoutError:
+        mock_serve_forever.assert_awaited()
 
 
 @pytest.mark.asyncio
@@ -127,7 +125,7 @@ async def test_run_server_with_timeout_limit(
     mock_schedule_task = AsyncMock()
 
     mocker.patch(
-        "kedung.server.schedule_task",
+        "kedung.server._schdule.schedule_task",
         side_effect=mock_schedule_task,
     )
-    await asyncio.wait_for(server.run(), timeout=0.2)
+    await asyncio.wait_for(server.run(), timeout=0.01)

@@ -3,7 +3,7 @@ from typing import cast
 from unittest.mock import AsyncMock
 
 import pytest
-from kedung.client import Client
+from kedung.client.connection import Client
 from kedung.utils.custom_types import Data
 from kedung.utils.exceptions import MissingComponentError
 from pytest_mock.plugin import MockerFixture
