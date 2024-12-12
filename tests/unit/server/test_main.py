@@ -112,7 +112,7 @@ async def test_successfully_run(
     )
 
     try:
-        await asyncio.wait_for(server.run(), 0.01)
+        await asyncio.wait_for(server.run(), 0.005)
     except TimeoutError:
         mock_serve_forever.assert_awaited()
 
@@ -128,4 +128,6 @@ async def test_run_server_with_timeout_limit(
         "kedung.server._schdule.schedule_task",
         side_effect=mock_schedule_task,
     )
-    await asyncio.wait_for(server.run(), timeout=0.01)
+
+    with pytest.raises(TimeoutError):
+        await asyncio.wait_for(server.run(), timeout=0.001)

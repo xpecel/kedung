@@ -16,10 +16,15 @@ DummyData = dict[str, dict[str, str | float | object]]
 LOCAL_ZONE = get_localzone()
 
 
+@pytest.fixture(scope="module")
+def datetime_obj() -> datetime:
+    return datetime.now(tz=LOCAL_ZONE)
+
+
 @pytest.fixture
-def dummy_data() -> DummyData:
+def dummy_data_5_min(datetime_obj: datetime) -> DummyData:
     """Dummy data dengan durasi kadalurasa 5 menit."""
-    expired = datetime.now(tz=LOCAL_ZONE).timestamp() + (5 * 60)
+    expired = datetime_obj.timestamp() + (5 * 60)
     return {
         "key_1": {
             "expired": expired,
@@ -29,9 +34,9 @@ def dummy_data() -> DummyData:
 
 
 @pytest.fixture
-def dummy_data_1_ms() -> DummyData:
+def dummy_data_1_ms(datetime_obj: datetime) -> DummyData:
     """Dummy data dengan durasi kadaluarsa 0.1 detik."""
-    expired = datetime.now(tz=LOCAL_ZONE).timestamp() + 0.1
+    expired = datetime_obj.timestamp() + 0.001
     return {
         "key_1": {
             "expired": expired,
@@ -49,7 +54,7 @@ async def test_schedule_task_with_expired_data_in_1_ms(
     mock_storage.all_items.return_value = dummy_data_1_ms
     mocker.patch(
         "kedung.server._schdule.CLEANER_DURATION",
-        0.1,
+        0.001,
     )
     mocker.patch.object(
         DataHolder,
@@ -59,7 +64,7 @@ async def test_schedule_task_with_expired_data_in_1_ms(
     with pytest.raises(TimeoutError):  # noqa: PT012
         # `schedule_task` adalah long-running, perlu dihentikan secara
         # manual.
-        await asyncio.wait_for(schedule_task(), timeout=0.2)
+        await asyncio.wait_for(schedule_task(), timeout=0.008)
 
     assert not bool(mock_storage.all_items())
 
@@ -67,16 +72,24 @@ async def test_schedule_task_with_expired_data_in_1_ms(
 @pytest.mark.asyncio
 async def test_remove_expired_items(
     mocker: MockerFixture,
-    dummy_data: DummyData,
+    dummy_data_5_min: DummyData,
+    datetime_obj: datetime,
 ) -> None:
     mock_storage = mocker.Mock()
-    mock_storage.all_items.return_value = dummy_data
+    mock_storage.all_items.return_value = dummy_data_5_min
+
+    mocker.patch(
+        "kedung.server._schdule.CLEANER_DURATION",
+        0.001,
+    )
     mocker.patch.object(
         DataHolder,
         "_storage",
-        dummy_data,
+        dummy_data_5_min,
     )
-    with freeze_time("2025-01-01"):
+
+    year = datetime_obj.year + 1
+    with freeze_time(f"{year}-01-01"):
         await _remove_expired_items()
         wo_data = await _remove_expired_items()  # type: ignore[func-returns-value]
 
@@ -84,13 +97,15 @@ async def test_remove_expired_items(
 
 
 def test_item_is_not_expired(
-    dummy_data: DummyData,
+    dummy_data_5_min: DummyData,
 ) -> None:
-    assert not _is_expired(dummy_data["key_1"])
+    assert not _is_expired(dummy_data_5_min["key_1"])
 
 
 def test_item_is_expired(
-    dummy_data: DummyData,
+    dummy_data_5_min: DummyData,
+    datetime_obj: datetime,
 ) -> None:
-    with freeze_time("2025-01-01"):
-        assert _is_expired(dummy_data["key_1"])
+    year = datetime_obj.year + 1
+    with freeze_time(f"{year}-01-01"):
+        assert _is_expired(dummy_data_5_min["key_1"])
