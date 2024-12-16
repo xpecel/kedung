@@ -10,11 +10,12 @@ _UC = dict[str, dict[str, str | int]] | None
 def _user_conf() -> _UC:
     """Menyediakan konfigurasi yg diperlukan agar app bisa berfungsi."""
     r_file: dict[str, _UC]
+    path_obj = Path("pyproject.toml")
 
-    try:
-        with Path("config.toml").open("r+b") as file:
+    if path_obj.exists():
+        with path_obj.open("r+b") as file:
             r_file = tomllib.load(file)
-    except FileNotFoundError:
+    else:
         default_path = "/tmp/kedung/"  # noqa: S108
         r_file = {
             "kedung": {

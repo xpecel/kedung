@@ -119,3 +119,11 @@ skip-magic-trailing-comma = false
 line-ending = "auto"
 docstring-code-format = true
 docstring-code-line-length = "dynamic"
+
+[kedung.runtime]
+cache_duration = 10  # menit
+preallocate_space = 7
+
+[kedung.location]
+socket = "/tmp/kedung/"
+log = "/tmp/kedung/"
