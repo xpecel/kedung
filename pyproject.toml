@@ -31,6 +31,7 @@ dev = [
     "mypy-extensions==1.0.0",
     "typing-extensions==4.12.2",
     "pylsp-mypy==0.6.9",
+    "pre-commit>=4.1.0"
 ]
 
 [project.urls]
@@ -91,7 +92,6 @@ preview = false
 select = ["ALL"]
 ignore = [
     "PLR6301",
-    "ANN102",
     "D401",
     "CPY001",
     "FBT001",
