@@ -1,6 +1,7 @@
 import asyncio
-import json
 from typing import TYPE_CHECKING, cast
+
+import orjson
 
 from kedung.utils.unpacking import UnpackRawData
 
@@ -27,8 +28,7 @@ class ClientBufferedProtocol(asyncio.BufferedProtocol):
     def buffer_updated(self, nbytes: int) -> None:
         raw_data: bytearray = self.buffer[:nbytes]
         for data in UnpackRawData(raw_data, "client"):
-            decoded_data = data.decode(encoding="utf-8")
-            actual_data: Data = json.loads(decoded_data)
+            actual_data: Data = orjson.loads(data)
             unique_key: str = cast("str", actual_data.pop("injected_data"))
 
             # data yg datang disimpan di `TmpStorage`. jadi method yg

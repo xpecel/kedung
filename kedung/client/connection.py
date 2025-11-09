@@ -1,8 +1,8 @@
 import asyncio
-import json
 from pathlib import Path
 from typing import cast
 
+import orjson
 import structlog
 
 from kedung.client import _helper as helper
@@ -194,7 +194,7 @@ class Client:
         injected_data = helper.inject_data(data, unique_key)
         informations = {"command": command, "data": injected_data}
 
-        json_data: str = json.dumps(informations)
+        json_data: str = orjson.dumps(informations)
 
         return (allocate_data_length(json_data), unique_key)
 
