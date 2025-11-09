@@ -8,7 +8,7 @@ import structlog
 
 sys.path.append(str(Path.cwd()))
 
-from kedung.client import Client
+from kedung.client.connection import Client
 from kedung.utils.logging import default_strouctlog_config
 
 if TYPE_CHECKING:
@@ -69,16 +69,17 @@ async def main() -> None:  # noqa: D103
     await client.send("FLUSH")
     execution_time = perf_counter() - time_start
 
+    total_requests_per_cycle = REQUESTS * 8  # 8 ops per number
+    total_requests = total_requests_per_cycle * CYCLES
+    avg_cycle = sum(times) / CYCLES
+
     await logger.ainfo(f"Total siklus: {CYCLES}")
-    await logger.ainfo(f"Total request persiklus: {REQUESTS * 8}")
+    await logger.ainfo(f"Total request persiklus: {total_requests_per_cycle}")
     await logger.ainfo(f"Ukuran data terikirim per-request: {DATA_SIZE}")
-    await logger.ainfo(
-        f"Rata-rata waktu eksekusi siklus: {sum(times) / CYCLES:.3f} detik",
-    )
+    await logger.ainfo(f"Rata-rata waktu eksekusi siklus: {avg_cycle:.3f} detik")
     await logger.ainfo(f"Total waktu eksekusi: {execution_time:.3f} detik")
-    await logger.ainfo(
-        f"Throughput: {int(REQUESTS / execution_time)} request/detik",
-    )
+    throughput = total_requests / execution_time
+    await logger.ainfo(f"Throughput: {int(throughput)} request/detik")
 
 
 try:
