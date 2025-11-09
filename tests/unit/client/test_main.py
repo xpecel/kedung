@@ -1,12 +1,14 @@
 import asyncio
-from typing import cast
+from typing import TYPE_CHECKING, cast
 from unittest.mock import AsyncMock
 
 import pytest
 from kedung.client.connection import Client
-from kedung.utils.custom_types import Data
 from kedung.utils.exceptions import MissingComponentError
 from pytest_mock.plugin import MockerFixture
+
+if TYPE_CHECKING:
+    from kedung.utils.custom_types import Data
 
 
 @pytest.fixture
@@ -67,7 +69,7 @@ def test_pre_processing_with_valid_data(
 
     encoded_data, unique_key = client._pre_processing_data(
         dummy_data[0],
-        cast(Data, dummy_data[1]),
+        cast("Data", dummy_data[1]),
     )
 
     assert len(unique_key) == length_key
@@ -137,7 +139,7 @@ async def test_send(
     )
     result: Data = await client.send(
         command=dummy_data[0],
-        data=cast(Data, dummy_data[1]),
+        data=cast("Data", dummy_data[1]),
     )
 
     assert result.get("key_1")

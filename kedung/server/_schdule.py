@@ -43,6 +43,6 @@ async def _remove_expired_items() -> None:
 def _is_expired(value: MutableMapping[str, float | object]) -> bool:
     local_timezone = get_localzone()
     now: float = datetime.now(tz=local_timezone).timestamp()
-    expired: float = cast(float, value.get("expired"))
+    expired: float = cast("float", value.get("expired"))
 
     return now > expired

@@ -2,15 +2,17 @@ import asyncio
 import sys
 from pathlib import Path
 from time import perf_counter
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import structlog
 
 sys.path.append(str(Path.cwd()))
 
 from kedung.client import Client
-from kedung.utils.custom_types import Data
 from kedung.utils.logging import default_strouctlog_config
+
+if TYPE_CHECKING:
+    from kedung.utils.custom_types import Data
 
 client = Client()
 REQUESTS = 1000
@@ -50,7 +52,7 @@ async def main() -> None:  # noqa: D103
                 tasks.append(
                     client.send(
                         key,
-                        cast(Data, value),
+                        cast("Data", value),
                     ),
                 )
 

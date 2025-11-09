@@ -28,10 +28,10 @@ class Command:
         return list_command.get(command)
 
     def _split_data(self, data: Data) -> tuple[str, DataValue, str]:
-        actual_data = cast(dict[str, DataValue], data.get("data"))
+        actual_data = cast("dict[str, DataValue]", data.get("data"))
 
         # bagian penting dari sisi client.
-        injected_data = cast(str, actual_data.pop("injected_data"))
+        injected_data = cast("str", actual_data.pop("injected_data"))
         # nilai dari variabel key nantinya digunakan sebagai id
         # untuk membedakan data yg disimpan di `DataHolder`.
         key: str = next(iter(actual_data.keys()))
@@ -44,8 +44,8 @@ class Command:
         self,
         data: Data,
     ) -> tuple[dict[str, DataValue], str]:
-        actual_data = cast(dict[str, DataValue], data.get("data"))
-        injected_data = cast(str, actual_data.pop("injected_data"))
+        actual_data = cast("dict[str, DataValue]", data.get("data"))
+        injected_data = cast("str", actual_data.pop("injected_data"))
 
         return (actual_data, injected_data)
 
@@ -54,21 +54,21 @@ class Command:
         operation_result: dict[str, object] = self._storage.get(key)
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def set_(self, data: Data) -> Data:
         key, value, injected_data = self._split_data(data)
         operation_result: dict[str, bool] = self._storage.set_(key, value)
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def del_(self, data: Data) -> Data:
         key, _, injected_data = self._split_data(data)
         operation_result: dict[str, bool] = {key: self._storage.clear(key)}
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def exist(self, data: Data) -> Data:
         key, _, injected_data = self._split_data(data)
@@ -77,7 +77,7 @@ class Command:
         operation_result: dict[str, bool] = {key: bool(status.get(key))}
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def bulk_get(self, data: Data) -> Data:
         actual_data, injected_data = self._bulk_split_data(data)
@@ -88,7 +88,7 @@ class Command:
             operation_result[key] = chunk.pop(key)
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def bulk_set(self, data: Data) -> Data:
         actual_data, injected_data = self._bulk_split_data(data)
@@ -99,7 +99,7 @@ class Command:
             operation_result[key] = chunk.pop(key)
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def bulk_del(self, data: Data) -> Data:
         actual_data, injected_data = self._bulk_split_data(data)
@@ -109,7 +109,7 @@ class Command:
             operation_result[key] = self._storage.clear(key)
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def bulk_exists(self, data: Data) -> Data:
         actual_data, injected_data = self._bulk_split_data(data)
@@ -120,12 +120,12 @@ class Command:
             operation_result[key] = bool(chunk.get(key))
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)
 
     def flush_(self, data: Data) -> Data:
-        actual_data = cast(dict[str, DataValue], data.get("data"))
-        injected_data = cast(str, actual_data.pop("injected_data"))
+        actual_data = cast("dict[str, DataValue]", data.get("data"))
+        injected_data = cast("str", actual_data.pop("injected_data"))
         operation_result: dict[str, bool] = {"flush": self._storage.clear_all()}
 
         result = {**operation_result, "injected_data": injected_data}
-        return cast(Data, result)
+        return cast("Data", result)

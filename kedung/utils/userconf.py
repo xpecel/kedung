@@ -46,7 +46,7 @@ def get_sock_path() -> str:
     return (
         socket
         if isinstance(socket, str)
-        else cast(str, socket.get("socket", default_path))
+        else cast("str", socket.get("socket", default_path))
     )
 
 
@@ -62,7 +62,7 @@ def get_log_path() -> str:
     return (
         socket
         if isinstance(socket, str)
-        else cast(str, socket.get("log", default_path))
+        else cast("str", socket.get("log", default_path))
     )
 
 
@@ -78,7 +78,7 @@ def get_preallocate_space() -> int:
     return (
         runtime
         if isinstance(runtime, int)
-        else cast(int, runtime.get("preallocate_space", default_space))
+        else cast("int", runtime.get("preallocate_space", default_space))
     )
 
 
@@ -95,13 +95,13 @@ def get_loging_level() -> int:
     default_status = "INFO"
 
     if not read_file:
-        return cast(int, logging_levels.get(default_status))
+        return cast("int", logging_levels.get(default_status))
 
     runtime: str | dict[str, int | str] = read_file.get("runtime", default_status)
     level: str = (
         runtime
         if isinstance(runtime, str)
-        else cast(str, runtime.get("logging", default_status))
+        else cast("str", runtime.get("logging", default_status))
     )
 
     return logging_levels.get(level.upper(), 20)
@@ -119,5 +119,5 @@ def get_cache_duration() -> int:
     return (
         duration
         if isinstance(duration, int)
-        else cast(int, duration.get("cache_duration", default_space))
+        else cast("int", duration.get("cache_duration", default_space))
     )

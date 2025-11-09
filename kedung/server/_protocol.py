@@ -1,5 +1,4 @@
 import asyncio
-from collections.abc import MutableMapping
 from typing import TYPE_CHECKING, cast
 
 import structlog
@@ -13,6 +12,8 @@ from ._commands import Command
 from ._serdes import deserializer, serilizer
 
 if TYPE_CHECKING:
+    from collections.abc import MutableMapping
+
     from ._types import CommandCall
 
 logger = structlog.get_logger()
@@ -56,11 +57,11 @@ class ServerBufferedProtocol(asyncio.BufferedProtocol):
         result: Data
 
         data_value = cast(
-            MutableMapping[object, object],
+            "MutableMapping[object, object]",
             user_data.get("data"),
         )
-        injected_data = cast(str, data_value.get("injected_data"))
-        command = cast(str | None, user_data.get("command"))
+        injected_data = cast("str", data_value.get("injected_data"))
+        command = cast("str | None", user_data.get("command"))
 
         # Validasi jika  key `command` ada di dalam `user_data` dan
         # terdaftar di kelas `Command` sebagai salah satu method.

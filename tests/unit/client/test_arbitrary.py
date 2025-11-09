@@ -1,11 +1,13 @@
 """Mengkover test yg belum atau tidak terkover di modul lain."""
 
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import pytest
 from kedung.client._helper import create_unique_key, inject_data
 from kedung.client._tmp_storage import TmpStorage
-from kedung.utils.custom_types import Data
+
+if TYPE_CHECKING:
+    from kedung.utils.custom_types import Data
 
 
 @pytest.fixture
@@ -24,7 +26,7 @@ def test_add_data_into_storage(
 ) -> None:
     unique_key = "unique_1"
 
-    storage.add_data(unique_key, cast(Data, dummy_data))
+    storage.add_data(unique_key, cast("Data", dummy_data))
 
     assert storage._bucket.get(unique_key)
 
@@ -35,7 +37,7 @@ def test_get_data_from_storage(
 ) -> None:
     unique_key = "unique_1"
 
-    storage.add_data(unique_key, cast(Data, dummy_data))
+    storage.add_data(unique_key, cast("Data", dummy_data))
     result = storage.get_data(unique_key)
 
     assert result
@@ -43,7 +45,7 @@ def test_get_data_from_storage(
 
 
 def test_inject_data(dummy_data: dict[str, str]) -> None:
-    result = inject_data(cast(Data, dummy_data), "test_injected_data")
+    result = inject_data(cast("Data", dummy_data), "test_injected_data")
     assert result.get("injected_data")
 
 

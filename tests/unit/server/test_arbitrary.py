@@ -1,9 +1,11 @@
 from json import dumps
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import pytest
 from kedung.server._serdes import deserializer, serilizer
-from kedung.utils.custom_types import Data
+
+if TYPE_CHECKING:
+    from kedung.utils.custom_types import Data
 
 
 @pytest.fixture
@@ -18,5 +20,5 @@ def test_deserializer(dummy_data: dict[str, str]) -> None:
 
 
 def test_serializer(dummy_data: dict[str, str]) -> None:
-    serializer_data = serilizer(cast(Data, dummy_data))
+    serializer_data = serilizer(cast("Data", dummy_data))
     assert isinstance(serializer_data, str)

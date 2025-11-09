@@ -122,4 +122,4 @@ class UnpackRawData:
 
     @property
     def _get_broken_data(self) -> bytes:
-        return cast(bytes, self.__class__._broken_data.get(self._user))  # noqa: SLF001
+        return cast("bytes", self.__class__._broken_data.get(self._user))  # noqa: SLF001

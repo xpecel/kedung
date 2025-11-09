@@ -29,7 +29,7 @@ class ClientBufferedProtocol(asyncio.BufferedProtocol):
         for data in UnpackRawData(raw_data, "client"):
             decoded_data = data.decode(encoding="utf-8")
             actual_data: Data = json.loads(decoded_data)
-            unique_key: str = cast(str, actual_data.pop("injected_data"))
+            unique_key: str = cast("str", actual_data.pop("injected_data"))
 
             # data yg datang disimpan di `TmpStorage`. jadi method yg
             # berkomunikasi dengan server bisa mengecek apakah jawaban

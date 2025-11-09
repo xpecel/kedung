@@ -144,7 +144,7 @@ class Client:
 
         encoded_data, unique_key = self._pre_processing_data(
             command.upper(),
-            cast(Data, data),
+            cast("Data", data),
         )
         self._transport.write(encoded_data)
 
@@ -152,7 +152,7 @@ class Client:
         while True:
             result, status = self._get_injected_data(unique_key)
             if status:
-                operation_result = cast(Data, result)
+                operation_result = cast("Data", result)
                 break
             await asyncio.sleep(0.01)
 

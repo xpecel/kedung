@@ -2,7 +2,7 @@ import os
 import sys
 from contextlib import suppress
 from pathlib import Path
-from typing import TypeVar
+from typing import Self, TypeVar
 
 from kedung.utils.userconf import get_log_path, get_sock_path
 
@@ -225,7 +225,7 @@ class SocketPath(_BasePath):
 
     _instance = None
 
-    def __new__(cls: type[SP]) -> SP:  # noqa: D102
+    def __new__(cls) -> Self:  # noqa: D102
         if cls._instance is None:
             location = get_sock_path()
             cls._extension = "sock"
@@ -268,7 +268,7 @@ class LogPath(_BasePath):
 
     _instance = None
 
-    def __new__(cls: type[LP]) -> LP:  # noqa: D102
+    def __new__(cls) -> Self:  # noqa: D102
         if cls._instance is None:
             location = get_log_path()
             cls._extension = "log"

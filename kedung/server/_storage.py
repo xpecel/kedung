@@ -83,7 +83,7 @@ class DataHolder:
     def _is_data_expired(cls, key: str) -> bool:
         local_timezone: tzinfo = get_localzone()
         now: float = datetime.now(tz=local_timezone).timestamp()
-        data = cast(dict[str, object | float], cls._storage.get(key))
+        data = cast("dict[str, object | float]", cls._storage.get(key))
 
-        expiration_date = cast(float, data.get("expired"))
+        expiration_date = cast("float", data.get("expired"))
         return now >= expiration_date
